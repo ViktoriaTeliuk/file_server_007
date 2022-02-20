@@ -1,6 +1,7 @@
 import string
 import random
+import uuid
 
 
-def random_string(length):
-    return ''.join(random.sample(string.ascii_lowercase + string.digits, length))
+def random_string(length: int) -> str:
+    return str(uuid.uuid4())[:length]

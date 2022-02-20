@@ -1,48 +1,33 @@
+import datetime
 import os
-from file_server_007.src import utils
+from typing import Optional, Tuple
+from src import utils
+from src.crypto.signature import SignatureFactory
+
+from abc import ABCMeta, abstractmethod
 
 
-def unique_file_name():
-    return utils.random_string(10)
+class FileService(metaclass=ABCMeta):
 
+    @abstractmethod
+    def read(self, filename: str) -> str: raise Exception("not implemented")
 
-def create_file(content):
-    filename = unique_file_name()
-    while os.path.exists(filename):
-        filename = unique_file_name()
-    with open(filename, "w") as f:
-        f.write(content)
-    return filename
+    @abstractmethod
+    def write(self, filename: str) -> str: raise Exception("not implemented")
 
+    @abstractmethod
+    def remove(self, filename: str): raise Exception("not implemented")
 
-def delete_file(filename):
-    os.remove(filename)
+    @abstractmethod
+    def ls(self) -> [str]: raise Exception("not implemented")
 
+    @abstractmethod
+    def cd(self, dirname: str) -> None: raise Exception("not implemented")
 
-def read_file(filename):
-    with open(filename, "r") as f:
-        return f.read()
+    @abstractmethod
+    def read_metadata(self, filename: str) -> Tuple[str, str, int]: raise Exception("not implemented")
 
+    @abstractmethod
+    async def async_write(self, content: str) -> str:
+        raise NotImplemented
 
-def lsdir():
-    return os.listdir()
-
-
-def change_dir(directory):
-    os.chdir(directory)
-
-
-def check_file(filename):
-    return os.path.exists(filename) and os.path.isfile(filename)
-
-
-def check_dir(directory):
-    return os.path.exists(directory) and os.path.isdir(directory)
-
-
-def get_file_permissions(filename):
-    return oct(os.stat(filename).st_mode)
-
-
-def set_file_permissions(filename, permissions):
-    os.chmod(filename, int(permissions, 16))
